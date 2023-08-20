@@ -14,12 +14,17 @@ func newSearchBar() *tview.InputField {
 
 	searchbar = tview.NewInputField().
 		SetChangedFunc(func(text string) {
+			if len(text) != 0 && text[0] == ':' {
+				searchbar.SetFieldBackgroundColor(tcell.ColorWhite)
+			} else {
+				searchbar.SetFieldBackgroundColor(tcell.ColorBlue)
+			}
 			filterRows(text)
 		}).SetDoneFunc(func(key tcell.Key) {
 		if searchbar.GetText()[0] == ':' {
 			unlockDb(searchbar.GetText()[1:])
-			showAllRows()
 			searchbar.SetText("")
+			showAllRows()
 		}
 	})
 	return searchbar
